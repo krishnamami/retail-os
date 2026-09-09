@@ -1,0 +1,36 @@
+-- ============================================================================
+-- D4I_003c step 3E -- make missing provenance impossible. ONE STATEMENT.
+-- ============================================================================
+-- PRECONDITIONS, ALL MET BY D4I_003c_04_verify
+--   provenance NULL         = 0
+--   invalid vocabulary      = 0
+--   semantic changes vs v1  = 0
+--
+-- WHAT THIS CHANGES AND WHY IT IS THE POINT OF THE WHOLE PHASE
+--   Until now a writer that forgot provenance would insert a row that looks
+--   exactly like every other row, and nothing downstream could tell that its
+--   provenance was never established rather than established as OBSERVED.
+--   After this statement that insert fails. Combined with the deliberate
+--   absence of a DEFAULT, the contract becomes: state how this value came to
+--   exist, or do not write it.
+--
+--   Prefer failure over silent provenance fabrication. That is why there is
+--   no DEFAULT here either -- adding one would undo the constraint in the
+--   same breath as adding it.
+--
+-- WHAT IT DOES NOT CHANGE
+--   No value, subject, property, timestamp, mapping, lineage or
+--   simulator_classification. PostgreSQL validates the existing 143 rows and
+--   rewrites nothing.
+--
+-- FINAL LIVE CONTRACT
+--   value_provenance varchar(32) NOT NULL, no DEFAULT,
+--   CHECK (value_provenance IN ('OBSERVED','DEFAULTED','DERIVED'))
+--
+-- If this statement fails, some row is still NULL -- re-run the backfill and
+-- D4I_003c_04_verify rather than forcing it.
+-- APPLY IN ONE TRANSACTION, THEN COMMIT.
+-- ============================================================================
+
+ALTER TABLE runtime.evidence
+    ALTER COLUMN value_provenance SET NOT NULL;

@@ -1,0 +1,31 @@
+{
+  "raw_baseline_count": 169,
+  "new_records_count": 8,
+  "final_expected_count": 177,
+  "partitions": {
+    "product_definition": {
+      "source": "product_definition",
+      "arrival_date": "2026-01-16",
+      "part_file": "part-00001.jsonl",
+      "record_count": 1,
+      "records": [
+        "PROD_DEF_2026_001"
+      ]
+    },
+    "configuration_governance": {
+      "source": "configuration_governance",
+      "arrival_date": "2026-02-01",
+      "part_file": "part-00001.jsonl",
+      "record_count": 7,
+      "records": [
+        "CONFIG_REQ_2026_001",
+        "CONFIG_REQ_2026_002",
+        "CONFIG_REQ_2026_003",
+        "CONFIG_REQ_2026_004",
+        "CONFIG_REQ_2026_005",
+        "CONFIG_REQ_2026_006",
+        "CONFIG_REQ_2026_007"
+      ]
+    }
+  }
+}

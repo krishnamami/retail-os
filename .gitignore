@@ -81,3 +81,8 @@ claris-ingestion-lambda*.zip
 # Secrets
 secrets/
 .secrets/
+
+# Local scratch (not part of the implementation)
+venv_local/
+out/
+nul

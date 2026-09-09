@@ -1,0 +1,5 @@
+node_modules/
+dist/
+public/data/
+_to_delete/
+*.tsbuildinfo

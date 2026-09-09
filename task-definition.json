@@ -1,0 +1,22 @@
+{
+  "family": "raw-ingestion-ecs",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::621646470377:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::621646470377:role/raw-ingestion-task-role",
+  "containerDefinitions": [
+    {
+      "name": "raw-ingestion",
+      "image": "621646470377.dkr.ecr.us-west-2.amazonaws.com/raw-ingestion:latest",
+      "environment": [
+        {"name": "AWS_REGION", "value": "us-west-2"},
+        {"name": "AWS_S3_BUCKET", "value": "accord-capital-loans-usw2-621646470377"},
+        {"name": "AWS_S3_PREFIX", "value": "claris/source-corpus/raw/"},
+        {"name": "POSTGRES_SECRET_NAME", "value": "retail_os/rds/postgres"},
+        {"name": "POSTGRES_DB_NAME", "value": "accord"}
+      ]
+    }
+  ]
+}

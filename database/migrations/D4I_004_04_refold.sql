@@ -1,0 +1,32 @@
+-- ============================================================================
+-- D4I_004 step 2b -- re-fold. ONE STATEMENT.
+-- ============================================================================
+-- WHY THE SAME HORIZON AND NOT A NEW ONE
+--   A fold snapshot claims to be the resolved state as of its horizon. Every
+--   new assertion has arrival_at well before 2026-06-20 10:45 -- the latest
+--   approval event arrived 2026-06-17 -- so the existing snapshot is not
+--   merely incomplete, it is WRONG: it asserts a state at a horizon while
+--   omitting facts that had already arrived by it. Folding at a fresh horizon
+--   would leave that false snapshot in place for anything still reading it.
+--
+--   runtime.fold_snapshot_at_horizon is VOLATILE and uses ON CONFLICT, so it
+--   is built to be re-run at the same horizon. That is what makes this the
+--   correcting act rather than a destructive one.
+--
+-- WHAT THIS CHANGES, STATED PLAINLY
+--   Decisions already recorded keep their stored input_digest -- those rows
+--   are not touched. But re-executing a decision now reads a fuller snapshot,
+--   so it will compute a different digest and supersede its predecessor. That
+--   is the supersession machinery working, not replay breaking: the old
+--   decision remains queryable with the state it actually saw.
+--
+-- WHAT MUST NOT MOVE
+--   configuration_request (7 subjects / 35 properties) and product (1 / 2)
+--   are the identity-assessment inputs. D4I_004 added no evidence on those
+--   subjects, so their snapshots must come back identical. The verifier
+--   checks that rather than assuming it.
+--
+-- APPLY IN ONE TRANSACTION, THEN COMMIT.
+-- ============================================================================
+
+SELECT * FROM runtime.fold_snapshot_at_horizon('2026-06-20 10:45:00+00'::timestamptz);

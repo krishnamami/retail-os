@@ -1,0 +1,15 @@
+-- =====================================================================
+-- Fold State Snapshot Module — Main Entry Point (CORRECTED)
+-- =====================================================================
+-- FIX #1: Removed destructive DELETE (lines 56-59 in original)
+-- FIX #2: Removed hardcoded KB/policy fallback exception handler
+-- FIX #3: Added INSERT ... ON CONFLICT DO NOTHING for idempotency
+-- FIX #4: Added outcome tracking (new_inserts, deterministic_replays, mismatches)
+-- =====================================================================
+-- DIFFERENCES FROM ORIGINAL:
+-- Lines 38-53: Removed EXCEPTION handler; raise error if governance not found
+-- Lines 56-59: Removed DELETE statement entirely
+-- Lines 64-224: Changed to INSERT ... ON CONFLICT DO NOTHING
+-- Lines 226-244: Added outcome tracking and safety checks
+-- Returns 10 columns instead of 7 (adds: new_snapshots_inserted, deterministic_replays, replay_mismatches)
+-- =====================================================================

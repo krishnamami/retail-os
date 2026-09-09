@@ -1,0 +1,21 @@
+-- ============================================================================
+-- D4I_004 step 2d -- fold at a new horizon. ONE STATEMENT.
+-- ============================================================================
+-- Horizon 2026-07-31, chosen deliberately:
+--   * after the latest assertion arrival (2026-07-16 08:30), so the snapshot
+--     sees every fact the corpus contains, including the two that arrive a
+--     month after the old horizon
+--   * a NEW horizon, not 2026-06-20, because the deployed fold's determinism
+--     check RAISES when recomputed content differs from what is persisted --
+--     and the property set legitimately changed. That check is protecting
+--     immutability; honouring it means adding history rather than rewriting it
+--   * the 2026-06-20 snapshot stays exactly as it was, still reproducible by
+--     the v1 function that produced it
+--
+-- Expected: 59+ subjects, every one carrying the full 50-property vocabulary,
+-- new_snapshots_inserted equal to the subject count, replay_mismatches 0.
+--
+-- APPLY IN ONE TRANSACTION, THEN COMMIT.
+-- ============================================================================
+
+SELECT * FROM runtime.fold_snapshot_at_horizon_v2('2026-07-31 00:00:00+00'::timestamptz);
